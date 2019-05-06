@@ -1,14 +1,28 @@
-Attribute VB_Name = "Module1"
 Sub Header()
     Dim objOutlook As Object
     Dim objMail As Object
     
+    Dim email As String
+    email = ""
+    
     
     Set objOutlook = CreateObject("Outlook.Application")
     Set objMail = objOutlook.CreateItem(0)
+    
+    email = "Mensagem=<br/>"
+    email = email + "<table width='100%' border='0'>"
+        email = email + "<tr>"
+            email = email + "<td width='33%'>" + Environ$("username") + "</td>"
+            email = email + "<td width='33%' style='text-align:center;'>" + Right(String(4, "0") & CStr(serial), 4) + "/" + CStr(Year(Now)) + "</td>"
+            email = email + "<td width='16%' style='text-align:right;'>" + Format(Now(), "ddmmyy") + "</td>"
+            email = email + "<td width='16%' style='text-align:right;'>" + Format(Now(), "HH:MM") + "</td>"
+        email = email + "</tr>"
+    email = email + "</table>"
+    email = email + "<br/><br/><br/>"
+
 
     With objMail
-        .HTMLBody = "Nome: " + usuarioRede + " | NR: " + Right(String(10, "0") & CStr(serial), 10) + "/" + CStr(Year(Now)) + "<br/>" + Format(Now(), "Long Date") + "<br/> <br/>"
+        .HTMLBody = email
         .Display
     End With
 End Sub
