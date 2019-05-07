@@ -5,6 +5,7 @@ Sub Header()
     Dim email As String
     email = ""
     
+    verifyAno
     
     Set objOutlook = CreateObject("Outlook.Application")
     Set objMail = objOutlook.CreateItem(0)
@@ -27,6 +28,43 @@ Sub Header()
     End With
 End Sub
 
+Function verifyAno() As Integer
+    Dim iArq As Long
+    Dim file As String
+    Dim fileExists As Boolean
+    Dim strTextLine
+    Dim lineArq
+    
+    index = 1
+    iArq = FreeFile
+    file = "C:/Macro/headerIndex.txt"
+    fileExists = False
+    lineArq = 1
+    verifyAno = 0
+    
+    If checkFileExists(file) Then
+        Open file For Input As iArq
+        
+        Do While Not EOF(iArq)
+            Line Input #iArq, strTextLine
+            If lineArq = 1 Then
+                verifyAno = strTextLine
+            End If
+            lineArq = lineArq + 1
+        Loop
+    End If
+    
+
+    Close #iArq
+    If Not checkFileExists(file) Or verifyAno <> Year(Now) Then
+        Open file For Output As iArq
+        Print #iArq, Year(Now)
+        Print #iArq, 1
+        verifyAno = Year(Now)
+
+        Close #iArq
+    End If
+End Function
 
 Function serial() As Integer
     Dim iArq As Long
@@ -34,25 +72,22 @@ Function serial() As Integer
     Dim file As String
     Dim fileExists As Boolean
     Dim strTextLine
+    Dim line
     
-    index = 1
     iArq = FreeFile
     file = "C:/Macro/headerIndex.txt"
     fileExists = False
+    line = 1
     
-    If checkFileExists(file) Then
-        Open file For Input As iArq
-        
-        Do While Not EOF(iArq)
+    Open file For Input As iArq
+    
+    Do While Not EOF(iArq)
             Line Input #iArq, strTextLine
-        Loop
-        
-        serial = strTextLine
-    Else
-        Open file For Output As iArq
-        Print #iArq, 1
-        serial = 1
-    End If
+        If line = 2 Then
+            serial = strTextLine
+        End If
+        line = line + 1
+    Loop
 
     Close #iArq
 End Function
@@ -75,6 +110,3 @@ Function usuarioRede() As String
     GetUserN = ObjNetwork.UserName
     usuarioRede = GetUserN
 End Function
-
-
-
