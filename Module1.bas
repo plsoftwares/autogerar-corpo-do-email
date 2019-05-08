@@ -19,12 +19,11 @@ Sub Header()
             email = email + "<td width='16%' style='text-align:right;'>" + Format(Now(), "HH:MM") + "</td>"
         email = email + "</tr>"
     email = email + "</table>"
-    email = email + "<br/><br/><br/>"
 
 
     With objMail
-        .HTMLBody = email
         .Display
+        .HTMLBody = email & "<br>" & .HTMLBody
     End With
 End Sub
 
